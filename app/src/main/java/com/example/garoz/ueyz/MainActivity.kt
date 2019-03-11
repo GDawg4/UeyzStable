@@ -3,6 +3,7 @@ package com.example.garoz.ueyz
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+
 import android.view.View
 import android.widget.Toast
 import com.example.garoz.ueyz.Views.NewUserActivity
@@ -10,6 +11,13 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+
+
+
+
+
 
 class MainActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
