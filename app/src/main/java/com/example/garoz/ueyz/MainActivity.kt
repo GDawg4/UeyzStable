@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
                             if (currentUserName.equals(correctUser) && correctPassword.equals(currentPassword)){
                                 Toast.makeText(applicationContext,"Usuario y Contraseña correctos",Toast.LENGTH_SHORT).show()
                                 succes = true
+                                val addStore = Intent(this, NewStoreActivity::class.java)
+                                startActivity(addStore)
                                 break
                             }
                         }

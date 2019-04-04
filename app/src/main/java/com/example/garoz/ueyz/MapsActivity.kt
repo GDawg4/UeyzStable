@@ -18,8 +18,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+    val db = FirebaseFirestore.getInstance()
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -45,8 +49,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -67,6 +71,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(posActual))
                     }
         }
+
+        var documentsRef = db.collection("tiendas")
+        //Obtiene todos los documentos de la base de datos
+        documentsRef
+                .get()
+                .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        //recorre todos los documentos y verifica si uno tiene la informacion que se necesita
+                        for (document in task.result!!) {
+                            mMap.addMarker(MarkerOptions().position(LatLng(document["latitude"].toString().toDouble(), document["longitude"].toString().toDouble())).title(document["name"].toString()))
+                        }
+                    } else {
+                        Toast.makeText(applicationContext,"Error",Toast.LENGTH_SHORT).show()
+                    }
+                })
+        mMap.clear()
     }
 
 }
